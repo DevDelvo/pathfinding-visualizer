@@ -2,7 +2,7 @@ export function dijkstra(grid, startNode, endNode) {
     if (!startNode || !endNode | startNode === endNode) {
         return false;
     }
-    const visitedNodes = [];
+    const visitedNodesInOrder = [];
     startNode.distance = 0;
     const unvisitedNodes = getAllNodes(grid);
     while (!!unvisitedNodes.length) {
