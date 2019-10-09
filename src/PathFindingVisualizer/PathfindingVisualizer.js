@@ -8,7 +8,7 @@ export default class PathfindingVisualizer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            nodes: [],
+            grid: [],
             startNode: {
                 row: 10, col: 15
             },
@@ -20,22 +20,22 @@ export default class PathfindingVisualizer extends Component {
     }
 
     componentDidMount() {
-        const nodes = this.createBoard();
-        this.setState({ nodes });
+        const grid = this.createBoard();
+        this.setState({ grid });
     }
 
-    handleMouseDown(row, col) {
+    handleMouseDown = (row, col) => {
         const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
         this.setState({ grid: newGrid, mouseIsPressed: true });
     }
 
-    handleMouseEnter(row, col) {
+    handleMouseEnter = (row, col) => {
         if (!this.state.mouseIsPressed) return;
         const newGrid = this.getNewGridWithWallToggled(this.state.grid, row, col);
         this.setState({ grid: newGrid });
     }
 
-    handleMouseUp() {
+    handleMouseUp = () => {
         this.setState({ mouseIsPressed: false })
     }
 
@@ -77,21 +77,29 @@ export default class PathfindingVisualizer extends Component {
     }
 
     render() {
-        const { nodes } = this.state;
-        console.log(nodes)
+        const { grid } = this.state;
+        const { handleMouseDown, handleMouseEnter, handleMouseUp } = this;
+        // console.log(this.state)
         return (
             <div className="grid">
                 {
-                    nodes.map((row, rowIdx) => {
+                    grid.map((row, rowIdx) => {
                         return (
                             <div key={rowIdx}>
                                 {
                                     row.map((node, nodeIdx) => {
-                                        const { start, end } = node;
+                                        const { row, col, start, end, isWall } = node;
                                         return (
-                                            <Node key={nodeIdx}
+                                            <Node
+                                                key={nodeIdx}
+                                                row={row}
+                                                col={col}
                                                 start={start}
                                                 end={end}
+                                                isWall={isWall}
+                                                onMouseDown={(row, col) => handleMouseDown(row, col)}
+                                                onMouseEnter={(row, col) => handleMouseEnter(row, col)}
+                                                onMouseUp={() => handleMouseUp()}
                                             >
                                             </Node>
                                         )
