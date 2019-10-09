@@ -12,3 +12,7 @@
 .node-finish {
     background-color: red;
 }
+
+.node-wall {
+    background-color: grey;
+}
