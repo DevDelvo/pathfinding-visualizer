@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Node from './Node/Node';
-// import { createNode, createBoard, getNewGridWithWallToggled } from './createBoardHelper'
+import { dijkstra, getNodesInShortestPathOrder } from '../algorithms/dijkstrasAlgorithm'
 
 import './PathfindingVisualizer.css'
 
@@ -74,6 +74,30 @@ export default class PathfindingVisualizer extends Component {
         };
         newGrid[row][col] = newNode;
         return newGrid;
+    }
+
+    animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
+        for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+            if (i === visitedNodesInOrder.length) {
+                setTimeout(() => {
+                    this.animateShortestPath(nodesInShortestPathOrder);
+                }, i * 10);
+                return;
+            }
+            setTimeout(() => {
+                const currentNode = visitedNodesInOrder[i];
+                document.getElementById(`node-${currentNode.row}-${currentNode.col}`.className = `node node-visited`);
+            }, i * 10)
+        }
+    }
+
+    animateShortestPath(nodesInShortestPathOrder) {
+        for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+            setTimeout(() => {
+                const currentNode = nodesInShortestPathOrder[i];
+                document.getElementById(`node-${currentNode.row}-${currentNode.col}`).className = 'node node-shortest-path';
+            }, i * 50)
+        }
     }
 
     render() {
