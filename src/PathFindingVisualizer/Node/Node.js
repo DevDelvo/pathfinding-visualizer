@@ -29,8 +29,3 @@ export default class Node extends Component {
         )
     }
 }
-
-export const DEFAULT_NODE = {
-    row: 0,
-    col: 0
-}
