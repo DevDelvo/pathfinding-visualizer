@@ -11,13 +11,13 @@ export default class PathfindingVisualizer extends Component {
             grid: [],
             size: {
                 height: 20,
-                width: 30
+                width: 40
             },
             startNode: {
-                row: 10, col: 10
+                row: 5, col: 10
             },
             endNode: {
-                row: 10, col: 25
+                row: 15, col: 25
             },
             mouseIsPressed: false,
         };
@@ -83,7 +83,7 @@ export default class PathfindingVisualizer extends Component {
 
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
         for (let i = 0; i <= visitedNodesInOrder.length; i++) {
-            if (i === 0) continue;
+            if (i === 0 || i === visitedNodesInOrder.length - 1) continue; // dont change style of start or end node
             if (i === visitedNodesInOrder.length) {
                 setTimeout(() => {
                     this.animateShortestPath(nodesInShortestPathOrder);
@@ -100,6 +100,7 @@ export default class PathfindingVisualizer extends Component {
 
     animateShortestPath(nodesInShortestPathOrder) {
         for (let i = 0; i < nodesInShortestPathOrder.length; i++) {
+            if (i === 0 || i === nodesInShortestPathOrder.length - 1) continue
             setTimeout(() => {
                 const currentNode = nodesInShortestPathOrder[i];
                 document.getElementById(`node-${currentNode.row}-${currentNode.col}`).className = 'node node-shortest-path';
