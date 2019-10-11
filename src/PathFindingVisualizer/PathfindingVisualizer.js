@@ -9,11 +9,15 @@ export default class PathfindingVisualizer extends Component {
         super(props);
         this.state = {
             grid: [],
+            size: {
+                height: 20,
+                width: 30
+            },
             startNode: {
-                row: 10, col: 15
+                row: 10, col: 10
             },
             endNode: {
-                row: 10, col: 35
+                row: 10, col: 25
             },
             mouseIsPressed: false,
         };
@@ -53,10 +57,11 @@ export default class PathfindingVisualizer extends Component {
     }
 
     createBoard = () => {
+        const { size: { height, width } } = this.state;
         const nodes = [];
-        for (let row = 0; row < 20; row++) {
+        for (let row = 0; row < height; row++) {
             const currRow = [];
-            for (let col = 0; col < 40; col++) {
+            for (let col = 0; col < width; col++) {
                 const newNode = this.createNode(col, row);
                 currRow.push(newNode);
             }
@@ -78,6 +83,7 @@ export default class PathfindingVisualizer extends Component {
 
     animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder) {
         for (let i = 0; i <= visitedNodesInOrder.length; i++) {
+            if (i === 0) continue;
             if (i === visitedNodesInOrder.length) {
                 setTimeout(() => {
                     this.animateShortestPath(nodesInShortestPathOrder);
@@ -86,7 +92,8 @@ export default class PathfindingVisualizer extends Component {
             }
             setTimeout(() => {
                 const currentNode = visitedNodesInOrder[i];
-                document.getElementById(`node-${currentNode.row}-${currentNode.col}`.className = `node node-visited`);
+                console.log('currentNode => ', currentNode)
+                document.getElementById(`node-${currentNode.row}-${currentNode.col}`).className = `node node-visited`;
             }, i * 10)
         }
     }
@@ -100,12 +107,29 @@ export default class PathfindingVisualizer extends Component {
         }
     }
 
+    visualizeDijksta() {
+        console.log('visualize')
+        const { grid, startNode, endNode } = this.state
+        // console.log('visualize => ', grid[startNode.row][startNode.col])
+        const start = grid[startNode.row][startNode.col];
+        const end = grid[endNode.row][endNode.col];
+        const visitedNodesInOrder = dijkstra(grid, start, end);
+        const nodesInShortestPathOrder = getNodesInShortestPathOrder(end);
+        this.animateDijkstra(visitedNodesInOrder, nodesInShortestPathOrder);
+    }
+
+    reset() {
+        // RESET STATE TO DEFAULT
+    }
+
     render() {
         const { grid } = this.state;
         const { handleMouseDown, handleMouseEnter, handleMouseUp } = this;
         // console.log(this.state)
         return (
             <div className="grid">
+                <button onClick={() => this.visualizeDijksta()}>Visualize Dijkstra's Algorithm</button>
+                <button onClick={() => this.reset()}>Reset</button>
                 {
                     grid.map((row, rowIdx) => {
                         return (
